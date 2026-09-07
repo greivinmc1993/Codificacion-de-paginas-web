@@ -2209,7 +2209,7 @@ base              hasta 767px             telefono
   Quien abra esta hoja de estilos o usted mismo dentro de 6 meses sepat o tenga una idea de lo que se hizo y de la estrategia que se usó*/
 
 /*Media querie para panttalla grande*/
-   /* query {#f1f,32}*/ 
+  /* query {#526,32}*/ 
   @media (min-width: 768px) {
     .cabecera {
       flex-direction: row;

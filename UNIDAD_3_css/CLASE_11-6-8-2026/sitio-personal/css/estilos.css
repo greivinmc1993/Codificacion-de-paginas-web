@@ -482,7 +482,7 @@ nav a{
 }
 .check:checked ~ .sub-menu{
 
-    height: 92rem;
+    height: 100vh;
     box-shadow: 0 0 0 100vmax rgba(0, 0, 0, 0.5);
     z-index: 100;
 }
