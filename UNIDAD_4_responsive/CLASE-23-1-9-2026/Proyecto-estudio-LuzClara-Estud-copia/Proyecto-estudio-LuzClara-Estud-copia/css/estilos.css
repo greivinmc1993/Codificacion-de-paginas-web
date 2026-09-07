@@ -590,6 +590,41 @@ img {
   margin-bottom: var(--esp-md);
 }
 
+.video-envoltorio {
+  width: 100%;
+  max-width: 96rem;
+  margin: 0 auto;
+
+  aspect-ratio: 16 / 9;
+  /* Mantiene la proporción sin importar el ancho de la pantalla.
+     La altura se calcula sola a partir del ancho disponible.
+     Antes de que existiera esta propiedad, conseguirlo requería un
+     truco con relleno en porcentaje que costaba explicar.            */
+
+  background-color: var(--color-tinta);
+  /* Color de respaldo mientras el video carga. Sin esto se ve un
+     hueco transparente que parece un error.                          */
+
+  border-radius: var(--radio);
+  overflow: hidden;
+  /* Recorta las esquinas del video para que sigan el redondeado del
+     envoltorio.                                                      */
+
+  box-shadow: var(--sombra-2);
+}
+
+.video-envoltorio video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  /* Igual que con las imágenes: RECORTA en vez de DEFORMAR si la
+     proporción del archivo no coincide con la del envoltorio.        */
+  display: block;
+}
+
+
+
+
 
 /* 6 · SERVICIOS · FLEXBOX           tema de la S16
 
@@ -1028,6 +1063,14 @@ img {
   text-align: right;
 }
 
+#testimonio, p, cita-texto{
+  font-size: 1.6rem;
+  line-height: 1.6;
+}
+
+
+
+
 
 /* 12 · TABLA           tema de la S18
 
@@ -1357,6 +1400,14 @@ img {
   opacity: 0.7;
   margin-bottom: 0;
 }
+
+/** LOS 5 PATRONES 
+SON LAS 5 FORMAS EN QUE UN DISEÑO SE PUEDE REORGANIZAR AL CAMBIAR EL ANCHO PRINCIPALMENTE
+1-MOSTLY FLUID: UNA REJILLA QUE SE ENCONGE AL LLEGAR MINIMO SUS ELEMENTOS BAJAN DE LINIEA EN PANTALLA GRANDE SE DETIENE Y SE CENTRA.
+2-COLUMN DROP: COLUMNAS QUE SE APPILAN UNA DEBAJO DE OTRA AL ANGOSTAR, LO HACE FLEX-WRAP WRAP .
+3-LAYOUT SHIFER: LAS ZONAS CAMBIAN DE POSICION NO SOLO DE TAMAÑO  SE RESUELVE CON GRID.
+4-TINY TWEAKS: SOLO AJUSTA TAMAÑOS Y ESPACIOS PARA CONTENIDO DE UNA SOLA COLUMNA.
+5-OFF CANVAS: CONTENIDO QUE VIVE FUERA DE LA PANTALLA Y ENTRA AL PEDIRLO POR EJEMPLO EL MENU HAMBURGUESA.*/
 
 
 /* 16 · MOVIMIENTO           tema de la S19
@@ -2028,6 +2079,8 @@ img {
   .portada { min-height: 55rem; } /*una portada con 50px de alto ocupa casi toda la pantalla de un celular*/
 
   .seccion { padding: var(--esp-xl) var(--esp-lg); }
+
+
 }
 
 /*CUÁNTOS PUNTOS DE QUIEBRE HACEN FALTA
@@ -2092,6 +2145,12 @@ h3 { font-size: 2.0rem; }
   .tabla td {
     padding: var(--esp-xs);
     font-size: 1.4rem;
+  }
+  .video-envoltorio {
+    border-radius: 0;
+    /* En un teléfono el video ocupa casi todo el ancho: las esquinas
+       redondeadas dejan franjas del fondo que se ven como un error
+       de encuadre.                                                   */
   }
 }
 
@@ -2172,6 +2231,27 @@ base              hasta 767px             telefono
       display: flex;
       flex-direction: row;
     }
+    /* CAMBIOS PARA TABLETA */
+    #testimonio p{
+      font-size: 1.7rem;
+      max-width: 65ch;
+    }
+    .cita{
+      padding: var(--esp-lg);
+    }
+    .cita-texto{
+      font-size: 2.0rem;
+    }
+  }
+  @media(max-width: 600px){
+    .mosaico{
+      grid-template-columns: 1fr;
+      grid-auto-rows: 24rem;
+    }
+    .pieza-ancha, .pieza-alta, .pieza-grande{
+      grid-column: auto;
+      grid-row: auto;
+    }
   }
 
   @media(orientation: landscape) and (max-width: 500px){
@@ -2211,5 +2291,11 @@ base              hasta 767px             telefono
     font-size: 9pt;
     color: #555;
   }
+  .video-envoltorio {
+    display: none;
+  }
+  /* Un video en papel no sirve: no se puede reproducir. Si se quiere
+     dejar constancia de que existe, se puede sustituir por su imagen
+     de portada en lugar de ocultarlo.                                */
 }
 
