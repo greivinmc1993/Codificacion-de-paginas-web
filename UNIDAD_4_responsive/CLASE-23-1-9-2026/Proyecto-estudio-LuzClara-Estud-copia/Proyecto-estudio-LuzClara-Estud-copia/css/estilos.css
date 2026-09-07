@@ -957,6 +957,24 @@ img {
   font-style: italic;
 }
 
+/* BASE TELEFONO UNA COLUMNA LAYOUT SHIFTER */
+#historia, .dos-columnas{
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-areas: 
+  'imagen'
+  'texto';
+  gap: var(--esp-md);
+  /* EN MOVIL LA IMAGEN VA ARRIBA */
+}
+
+#historia, .columna-imagen{
+  grid-area: imagen;
+}
+
+#historia, .columna-texto{
+  grid-area: texto;
+}
 
 /* 10 · LISTAS Y GLOSARIO           tema de la S14 */
 
@@ -2191,6 +2209,7 @@ base              hasta 767px             telefono
   Quien abra esta hoja de estilos o usted mismo dentro de 6 meses sepat o tenga una idea de lo que se hizo y de la estrategia que se usó*/
 
 /*Media querie para panttalla grande*/
+   /* query {#f1f,32}*/ 
   @media (min-width: 768px) {
     .cabecera {
       flex-direction: row;
