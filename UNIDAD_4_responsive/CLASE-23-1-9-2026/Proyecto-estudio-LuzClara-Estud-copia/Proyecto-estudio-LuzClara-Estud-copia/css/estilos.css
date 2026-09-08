@@ -321,7 +321,7 @@ img {
 
 .cabecera {
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   /* OJO: ACTIVA FLEXBOX. Se declara en el CONTENEDOR, nunca en los hijos.
      Los hijos directos —el logo y la navegación— se convierten en
      "elementos flexibles" y se colocan en fila automáticamente.       */
@@ -406,16 +406,17 @@ img {
      necesidad de reescribir nada.                                    */
 }
 
+/*LA BASE PARA MOVIL*/
 .menu {
-  position: absolute;
-  top: 100%;
-  right: 0;
-  width: 0px;
-  margin: 0;
+  display: flex;
+  flex-direction: column; /*en movil el menu vuelve a columnas*/
+  gap: 0;
   list-style: none;
-  background-color: white;
-  overflow: hidden;
-  transition: width 0.5s ease, box-shadow 0.5s;
+  /* El menú es una LISTA por su significado —es un conjunto de
+     enlaces del mismo nivel— pero no debe VERSE como lista. Por eso
+     se quitan las viñetas con list-style.                             */
+  width: 100%;
+  display: none;
 }
 
 .menu-control {
@@ -453,9 +454,8 @@ img {
 
 /*Menu abierto cuando la casilla esta marcada*/
 .menu-control:checked ~ .menu {
-  width: 100%;
-  padding: 10px;
-  box-shadow: 0 0 0 100vmax rgba(0, 0, 0, 0.4);
+  display: flex;
+  flex-direction: column;
 }
 
 .menu-boton:focus-within {
@@ -589,7 +589,6 @@ img {
   font-size: 1.8rem;
   margin-bottom: var(--esp-md);
 }
-
 .video-envoltorio {
   width: 100%;
   max-width: 96rem;
@@ -621,9 +620,6 @@ img {
      proporción del archivo no coincide con la del envoltorio.        */
   display: block;
 }
-
-
-
 
 
 /* 6 · SERVICIOS · FLEXBOX           tema de la S16
@@ -859,6 +855,95 @@ img {
      desde abajo.                                                      */
 }
 
+/*Panel fuera de la pantalla. Patrón Off canvas*/
+.panel-control {
+  position: absolute;
+  opacity: 0;
+  width: 0.1rem;
+  height: 0.1rem;
+}
+
+.panel-lateral {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 28rem;/*faltó*/
+  height: 100vh;
+  background-color: var(--color-blanco);
+  box-shadow: var(--sombra-3);
+  padding: var(--esp-lg) var(--esp-md);
+  z-index: 200;
+  transform: translateX(-100%);/*aqui vive furra de la pantalla y se deasplaza 100 de su propio ancho hacia la izquierda*/
+  overflow-y:auto;
+}
+
+/*Hacer que el panel se deslice*/
+.panel-lateral {
+  transform: translateX(-100%);
+  transition: transform 0.3s ease;
+}
+
+/*Abierto cunado la casilla esta marcada*/
+.panel-control:checked ~ .panel-lateral {
+  transform: translateX(0);
+  /*vuelve a su posición entra deslizandose desd la izquierda*/
+}
+
+/*La capa oscura de fondo-Agregar .panel-fondo*/
+.panel-fondo {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 150;
+  /* Por debajo del panel (200) y por encima de la cabecera (100) */
+
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity .3s ease, visibility .3s ease;
+  /* No se usa display: none porque no se puede animar */
+}
+
+.panel-control:checked ~ .panel-fondo {
+  opacity: 1;
+  visibility: visible;
+  cursor: pointer;
+}
+
+.panel-control:checked ~ .panel-lateral::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 28rem;
+  right: 0;
+  bottom: 0;
+/*   background-color: rgba(0, 0, 0, 0.45);
+ */  z-index: -1; /*oscurece el resto de la página mientras el panel esta abierto*/
+}
+
+/*El boton  yel cierre*/
+.panel-boton,
+.panel-cerrar {
+  display: inline-block;
+  padding: var(--esp-xs) var(--esp-md);
+  background-color: var(--color-marca);
+  color: var(--color-blanco);
+  border-radius: var(--radio);
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 1.4rem;
+}
+
+.panel-cerrar {
+  margin-top: var(--esp-md);
+  background-color: var(--color-fondo-alt);
+  color: var(--color-tinta);
+}
+
+.panel-boton:focus-within,
+.panel-cerrar:focus-within {
+  outline: 0.2rem solid var(--color-acento);
+  outline-offset: 0.2rem;
+}
 
 /* 8 · EQUIPO · CSS GRID           tema de la S17 */
 
@@ -957,24 +1042,18 @@ img {
   font-style: italic;
 }
 
-/* BASE TELEFONO UNA COLUMNA LAYOUT SHIFTER */
-#historia, .dos-columnas{
+/*base . teléfono. una columna. Layout Shifter*/
+#historia .dos-columnas {
   display: grid;
   grid-template-columns: 1fr;
-  grid-template-areas: 
-  'imagen'
-  'texto';
+  grid-template-areas: 'imagen'
+                       'texto';
   gap: var(--esp-md);
-  /* EN MOVIL LA IMAGEN VA ARRIBA */
+  /*en movil la imagen va arriba. Una foto capta la atención y situa el contenido antes de leer*/
 }
 
-#historia, .columna-imagen{
-  grid-area: imagen;
-}
-
-#historia, .columna-texto{
-  grid-area: texto;
-}
+#historia .columna-imagen {grid-area: imagen;}
+#historia .columna-texto {grid-area: texto;}
 
 /* 10 · LISTAS Y GLOSARIO           tema de la S14 */
 
@@ -1080,15 +1159,12 @@ img {
   font-size: 1.4rem;
   text-align: right;
 }
-
-#testimonio, p, cita-texto{
+ /*Pequeños cambios para base teléfono*/
+#testimonio p,
+.cita-texto {
   font-size: 1.6rem;
   line-height: 1.6;
 }
-
-
-
-
 
 /* 12 · TABLA           tema de la S18
 
@@ -1419,13 +1495,20 @@ img {
   margin-bottom: 0;
 }
 
-/** LOS 5 PATRONES 
-SON LAS 5 FORMAS EN QUE UN DISEÑO SE PUEDE REORGANIZAR AL CAMBIAR EL ANCHO PRINCIPALMENTE
-1-MOSTLY FLUID: UNA REJILLA QUE SE ENCONGE AL LLEGAR MINIMO SUS ELEMENTOS BAJAN DE LINIEA EN PANTALLA GRANDE SE DETIENE Y SE CENTRA.
-2-COLUMN DROP: COLUMNAS QUE SE APPILAN UNA DEBAJO DE OTRA AL ANGOSTAR, LO HACE FLEX-WRAP WRAP .
-3-LAYOUT SHIFER: LAS ZONAS CAMBIAN DE POSICION NO SOLO DE TAMAÑO  SE RESUELVE CON GRID.
-4-TINY TWEAKS: SOLO AJUSTA TAMAÑOS Y ESPACIOS PARA CONTENIDO DE UNA SOLA COLUMNA.
-5-OFF CANVAS: CONTENIDO QUE VIVE FUERA DE LA PANTALLA Y ENTRA AL PEDIRLO POR EJEMPLO EL MENU HAMBURGUESA.*/
+/*LOS CINCO PATRONES.
+Son las 5 formas en  que un diseño puede reorganizarse al cambiar el ancho.
+
+1. Mostly Fluid. Una rejilla que se encoge y, al llegar al mínimo sus elementos bajan de linea. En pantalla grande se detiene y se centra.
+
+2. Column Drop. columnas que se apilan una debajo de la otra al angostar. Lo hace flex-wrap: wrap.
+
+3. Layout Shifter. Las zonas de posición, no solo de tamaño. Se resuelve con grid.
+
+4. Tiny Tweaks. Solo ajustan tamaños y espacios, para contenido de una sola columna.
+
+5. Off Canvas. Contenido que vive fuera de la pantalla y entra al pedirlo. Por ejemplo en menú hamburgueza*/
+
+
 
 
 /* 16 · MOVIMIENTO           tema de la S19
@@ -1441,6 +1524,7 @@ SON LAS 5 FORMAS EN QUE UN DISEÑO SE PUEDE REORGANIZAR AL CAMBIAR EL ANCHO PRIN
 .ficha:hover {
   transform: translateY(-0.6rem);
   box-shadow: var(--sombra-3);
+
   /* Dos cambios que van juntos: el elemento sube Y su sombra crece.
      Si solo subiera, se vería como un salto; si solo creciera la
      sombra, se vería como un parpadeo. Juntos producen la sensación de
@@ -2097,8 +2181,6 @@ SON LAS 5 FORMAS EN QUE UN DISEÑO SE PUEDE REORGANIZAR AL CAMBIAR EL ANCHO PRIN
   .portada { min-height: 55rem; } /*una portada con 50px de alto ocupa casi toda la pantalla de un celular*/
 
   .seccion { padding: var(--esp-xl) var(--esp-lg); }
-
-
 }
 
 /*CUÁNTOS PUNTOS DE QUIEBRE HACEN FALTA
@@ -2139,18 +2221,6 @@ h3 { font-size: 1.9rem; }
 h1 { font-size: 4.8rem; }
 h2 { font-size: 3.2rem; }
 h3 { font-size: 2.0rem; }
-.cabecera{
-  display: flex;
-  position: static;
-}
-.menu{
-  position: static;
-  }
-.menu-control:checked ~ .menu {
-  width: 100%;
-  padding: 0px;
-  box-shadow: none;
-}
 }
 
 /*LA TABLA DE contacto.html*/
@@ -2163,12 +2233,6 @@ h3 { font-size: 2.0rem; }
   .tabla td {
     padding: var(--esp-xs);
     font-size: 1.4rem;
-  }
-  .video-envoltorio {
-    border-radius: 0;
-    /* En un teléfono el video ocupa casi todo el ancho: las esquinas
-       redondeadas dejan franjas del fondo que se ven como un error
-       de encuadre.                                                   */
   }
 }
 
@@ -2209,7 +2273,6 @@ base              hasta 767px             telefono
   Quien abra esta hoja de estilos o usted mismo dentro de 6 meses sepat o tenga una idea de lo que se hizo y de la estrategia que se usó*/
 
 /*Media querie para panttalla grande*/
-  /* query {#526,32}*/ 
   @media (min-width: 768px) {
     .cabecera {
       flex-direction: row;
@@ -2227,89 +2290,173 @@ base              hasta 767px             telefono
       border-bottom: none;
       border-radius: var(--radio);
     }
+  }
 
-    .cabecera{
-  display: flex;
-  position: static;
+@media (min-width: 768px) { /*Aquí si corresponde el display none porque no deb existir en pantallas grandes*/
+  .menu-boton {
+    display: none;
+  }
+  .menu {
+    display: flex;
+    flex-direction: row;
+  }
 }
-.menu{
-  position: static;
+
+/*Usar orientación
+Aplicar reglas según si el dispositivo esta en vertical u horizontal*/
+
+@media (orientation: landscape) and (max-height: 500px) {
+  .portada {
+    min-height: 100vh;
+    padding: var(--esp-md);
   }
-.menu-control:checked ~ .menu {
-  width: 100%;
-  padding: 0px;
-  box-shadow: none;
+  .portada-titulo { font-size: 2.4rem;}
+  .portada-bajada { font-size: 1.5rem;}
+} 
+/*Ajustes de pantalla pequeña de video*/
+@media (max-width: 767px) {
+  .video-envoltorio {
+    border-radius: 0;
+    /* En un teléfono el video ocupa casi todo el ancho: las esquinas
+       redondeadas dejan franjas del fondo que se ven como un error
+       de encuadre.                                                   */
+  }
 }
-  }
 
-  @media (min-width: 768px){
-    .menu-boton{
-      display: none;
-    }
-    .menu{
-      display: flex;
-      flex-direction: row;
-    }
-    /* CAMBIOS PARA TABLETA */
-    #testimonio p{
-      font-size: 1.7rem;
-      max-width: 65ch;
-    }
-    .cita{
-      padding: var(--esp-lg);
-    }
-    .cita-texto{
-      font-size: 2.0rem;
-    }
+/*Pequeños cambios para base tableta*/
+@media (min-width: 768px) {
+  #testimonio p {
+    font-size: 1.7rem;
+    max-width: 65ch;
+    /*El limite en la linea aparece despues de tableta*/
   }
-  @media(max-width: 600px){
-    .mosaico{
-      grid-template-columns: 1fr;
-      grid-auto-rows: 24rem;
-    }
-    .pieza-ancha, .pieza-alta, .pieza-grande{
-      grid-column: auto;
-      grid-row: auto;
-    }
-  }
+  .cita {padding: var(--esp-lg);}
+  .cita-texto {font-size: 2.0rem;}
+}
 
-  @media(orientation: landscape) and (max-width: 500px){
-    .portada{
-      min-height: 100vh;
-      padding: var(--esp-md);
-    }
-    .portada-titulo{
-      font-size: 2.4rem;
-    }
-    .portada-bajada{
-      font-size: 1.5rem;
-    }
+/*Pequeños cambios para base escritorio*/
+@media (min-width: 1024px) {
+  #testimonio p {
+    font-size: 1.8rem;
+    line-height: 1.7;
+    /*El limite en la linea aparece despues de escritorio*/
   }
+  .cita-texto {font-size: 2.2rem;}
+}
+
+/*Mostly Fluid a .mosaico en galeria.html*/
+/*Ajustes para teléfono*/
+@media (max-width: 600px) {
+  .mosaico {
+    grid-template-columns: 1fr;
+    /*una sola columna de 360px, dos columnas de 180px las  fotos dejan de apreciarse*/
+    grid-auto-rows: 24rem;
+  }
+  .pieza-ancha,
+  .pieza-alta,
+  .pieza-grande {
+    grid-column: auto;
+    grid-row: auto;
+    /*Adaptar mosaico con piezas de distinto tamaño*/
+  }
+}
+
+/*Mostly Fluid a .mosaico en galeria.html*/
+/*Tope para pantalla grande*/
+@media (min-width: 1400px){
+  .mosaico {
+    max-width: 130rem;
+    margin-left: auto;
+    margin-right: auto;
+    /*Este patron no solo se encoge, también se detiene.*/
+  }
+}
+
+/*Patron Column Drop en zonas de columnas-tarjetas de index.html*/
+@media (min-width: 620px) and (max-width: 900px) {
+  .tarjeta {
+    flex: 1 1 calc(50% - var(--esp-md));
+    /*fuerza a dos por linea
+    calc(). permite mezclar unidades 50% del contenedor menos el hueco */
+  }
+  .tarjeta:last-child {
+    flex-basis: 100%;
+    /*la tercera tarjeta ocupa el ancho completo. Es una decision estética porque se ve mejor una tarjeta ancha que agosta y sola*/
+  }
+}
+
+/*base . tableta. dos columna. Layout Shifter. Imagen a la derecha*/
+@media (min-width: 768px) {
+  #historia .dos-columnas {
+    grid-template-columns: 3fr 2fr;
+    grid-template-areas: 'texto imagen';
+  }
+}
+
+/*base . escritorio. Layout Shifter. Imagen a la izquierda*/
+@media (min-width: 1200px) {
+  #historia .dos-columnas {
+    grid-template-columns: 2fr 3fr;
+    grid-template-areas: 'imagen texto';
+    /*La imagen cambia de lado, sin encoger o bajar*/
+  }
+}
+
+/*LAS CONSULTAS DISPONIBLES
+@media (min-width: 768px) ancho mínimo
+@media (max-width: 767px) ancho maximo
+@media (min-heigth: 600px) alto mínimo
+@media (orientation: portrait) vertical
+@media (orientation: landscape) horizontal
+@media print  impresion de la página
+@media (prefers-reduced-motion) preferencia de movimeinto
+@media (prefers-color-scheme: dark) tema oscuro
+*/
 
 @media print {
-  /* QUITAR LO QUE NO NOS SIRVE AL IMPIRMIR */
-  .cabecera{display: none;}
-  .menu-boton{display: none;}
-  .pie{display: none;}
-  .boton{display: none;}
-  .volver-arriba{display: none;}
-  .fila-etiquetas{display: none;}
-  body{
-    background-color: var(--color-blanco);
-  }
-  .table, .tarjeta, figure{
-    page-break-inside: avoid;
-  }
-  h1, h2, h3{
-    page-break-after: avoid;
+  /*QUITAR LO QUE NO SIRVE EN EL PAPEL*/
+  .cabecera,
+  .menu-boton,
+  .pie,
+  .boton,
+  .volver-arriba,
+  .fila-etiquetas {
+    display: none;
   }
 
-  /* MOSTRAR ENLACES */
-  main a[href^="http"]::after{
-    content: "(" attr(href)")";
-    font-size: 9pt;
-    color: #555;
+  /*Ahorrar tinta*/
+  body {
+    background: white;
+    color: black;
+    font-size: 11pt;
   }
+.seccion,
+.seccion-alterna {
+  background: none;
+  padding: 0;
+  max-width: none;
+}
+
+.tarjeta,
+.ficha,
+figure,
+.tabla {
+  page-break-inside: avoid;
+}
+
+h1, h2, h3 {
+  page-break-after: avoid;
+}
+
+/*mostrar los enlaces*/
+main a[href^="http"]::after {
+  content: " (" attr(href) ")";
+  font-size: 9pt;
+  color: #555;
+}
+}
+
+@media print {
   .video-envoltorio {
     display: none;
   }
@@ -2317,4 +2464,3 @@ base              hasta 767px             telefono
      dejar constancia de que existe, se puede sustituir por su imagen
      de portada en lugar de ocultarlo.                                */
 }
-
