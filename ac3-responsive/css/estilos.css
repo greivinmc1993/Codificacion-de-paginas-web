@@ -375,7 +375,7 @@ img {
 
 /* ─── TABLA ──────────────────────────────────────────────────────────── */
 .tabla {
-  width: 100%;
+  max-width: 20rem;
   border-collapse: collapse;
   background-color: var(--blanco);
   border-radius: var(--radio);
@@ -684,6 +684,15 @@ img {
   font-weight: 700;
 }
 
+#calendario{
+  max-width: 90%;
+}
+
+.tabla{
+  margin-left: auto;
+  margin-right: auto;
+}
+
 main{
   max-width: 100rem;
 }
@@ -777,16 +786,16 @@ main{
   align-items: center;
 }
 
-  h1 { font-size: 5.2rem; 
+h1 { font-size: 5.2rem; 
   }
 
-  h2 { font-size: 3.4rem; 
+h2 { font-size: 3.4rem; 
   }
 
-  h3 { font-size: 2.2rem; 
+h3 { font-size: 2.2rem; 
   }
 
-  .marca-texto {
+.marca-texto {
   font-family: var(--fuente-titulo);
   font-size: 3rem;
   font-weight: 700;
@@ -836,6 +845,16 @@ main{
 .formulario {
   max-width: 120rem;
   margin: 0 auto;
+}
+
+.tabla{
+  max-width: 120rem;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+#calendario{
+  width: 100%;
 }
 
 }
