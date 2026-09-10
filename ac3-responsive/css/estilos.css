@@ -782,6 +782,8 @@ main{
   max-width: 100%;
 }
 
+}
+
 /* ------MODO ESCRITORIO 1024PX EN ADELANTE------- */
 
 @media (width > 1024px){
