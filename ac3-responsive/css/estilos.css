@@ -689,8 +689,13 @@ img {
 }
 
 .tabla{
+  max-width: 100rem;
   margin-left: auto;
   margin-right: auto;
+}
+
+table{
+  width: 100%;
 }
 
 main{
@@ -758,12 +763,24 @@ main{
 }
 
 /* Aplicar al menos una característica de medio distinta del ancho. */
-@media (orientation: landscape) and (max-width: 100rem) {
-    .rejilla-galeria {
-        grid-template-columns: repeat(3, 1fr);
-    }
+@media (orientation: landscape) and (max-width: 80rem) {
+.rejilla-galeria {
+  grid-template-columns: repeat(2, 1fr);
 }
 
+.tabla{
+  max-width: 80rem;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+table{
+  width: 100%;
+}
+
+main{
+  max-width: 100%;
+}
 
 /* ------MODO ESCRITORIO 1024PX EN ADELANTE------- */
 
@@ -854,6 +871,10 @@ main{
 }
 
 #calendario{
+  width: 100%;
+}
+
+table{
   width: 100%;
 }
 
