@@ -786,7 +786,7 @@ main{
 
 /* ------MODO ESCRITORIO 1024PX EN ADELANTE------- */
 
-@media (width > 1024px){
+@media (width >= 1024px){
 
 .check-label{
   display: none;
